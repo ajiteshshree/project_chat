@@ -96,7 +96,7 @@ func parseRange(header string, size int64) (start, end int64, ok bool) {
 	if parts[1] == "" {
 		return start, size - 1, true
 	}
-	end, err := strconv.ParseInt(parts[1], 10, 64)
+	end, err = strconv.ParseInt(parts[1], 10, 64)
 	if err != nil || end < start {
 		return 0, 0, false
 	}

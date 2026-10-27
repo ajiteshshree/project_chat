@@ -93,7 +93,7 @@ func (h *Hub) broadcastPresence(u *User, online bool) {
 			"online":   online,
 		},
 	}
-	h.sendToRoom(h.store.lobbyID, payload, 0)
+	h.sendToRoom(h.store.lobbyID, payload, nil)
 }
 
 func (h *Hub) isOnline(userID int64) bool {
