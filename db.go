@@ -39,6 +39,13 @@ func runMigrations(ctx context.Context, pool *pgxpool.Pool) error {
 }
 
 func (s *Store) ensureLobby(ctx context.Context) error {
+	// Clean up duplicate lobbies if any exist
+	_, _ = s.pool.Exec(ctx, `
+		DELETE FROM conversations
+		WHERE kind = 'lobby' AND id NOT IN (
+			SELECT id FROM conversations WHERE kind = 'lobby' ORDER BY id ASC LIMIT 1
+		)
+	`)
 	id, err := s.insertConversationIfMissing(ctx, "lobby", "Lobby")
 	if err != nil {
 		return err
