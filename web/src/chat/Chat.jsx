@@ -13,6 +13,7 @@ export default function Chat({ me, onLogout }) {
   const [typing, setTyping] = useState({})
   const [showProfile, setShowProfile] = useState(false)
   const [connected, setConnected] = useState(false)
+  const [showSidebar, setShowSidebar] = useState(true)
   const wsRef = useRef(null)
   const activeRef = useRef(null)
   const messagesRef = useRef(null)
@@ -29,6 +30,7 @@ export default function Chat({ me, onLogout }) {
     messagesRef.current = []
     setHasMore(true)
     setTyping({})
+    setShowSidebar(false)
     api
       .messages(conv.id)
       .then((msgs) => {
@@ -154,9 +156,14 @@ export default function Chat({ me, onLogout }) {
   }, [])
 
   const activeConv = conversations.find((c) => c.id === active) || null
+  const goBack = useCallback(() => {
+    setShowSidebar(true)
+    setActive(null)
+    activeRef.current = null
+  }, [])
 
   return (
-    <div className="layout">
+    <div className={`layout ${showSidebar ? 'show-sidebar' : 'show-thread'}`}>
       <Sidebar
         me={me}
         conversations={conversations}
@@ -183,9 +190,12 @@ export default function Chat({ me, onLogout }) {
             sendMessage({ content: content || '', file_url: fileUrl || '', msg_type: type || 'text' })
           }
           onTyping={sendTyping}
+          onBack={goBack}
         />
       ) : (
-        <div className="center-screen empty">Pick a conversation</div>
+        <div className="thread empty-thread">
+          <div className="center-screen empty">Pick a conversation</div>
+        </div>
       )}
       {showProfile && (
         <ProfileModal

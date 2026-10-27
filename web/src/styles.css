@@ -338,6 +338,68 @@ input:focus, textarea:focus { border-color: var(--accent); }
 }
 
 @media (max-width: 720px) {
-  .layout { grid-template-columns: 1fr; }
-  .sidebar { display: none; }
+  .layout {
+    grid-template-columns: 100vw 100vw;
+    width: 200vw;
+    transition: transform 0.25s ease;
+  }
+  .layout.show-sidebar {
+    transform: translateX(0);
+  }
+  .layout.show-thread {
+    transform: translateX(-100vw);
+  }
+  body {
+    overflow: hidden;
+  }
+  .sidebar {
+    width: 100vw;
+    height: 100vh;
+  }
+  .thread {
+    width: 100vw;
+    height: 100vh;
+  }
+  .empty-thread {
+    width: 100vw;
+    height: 100vh;
+  }
+  .thread-header {
+    padding: 10px 12px;
+  }
+  .thread-header-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .mobile-back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    padding: 6px 10px;
+  }
+  .scroller {
+    padding: 12px;
+  }
+  .composer {
+    padding: 8px 10px;
+    gap: 6px;
+  }
+  .composer textarea {
+    min-height: 38px;
+  }
+  .send-btn {
+    padding: 8px 14px;
+  }
+  .msg-bubble {
+    max-width: 85%;
+  }
+  .emoji-pop {
+    width: 300px;
+  }
+}
+
+.mobile-back {
+  display: none;
 }

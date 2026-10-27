@@ -14,6 +14,7 @@ export default function Thread({
   onLoadOlder,
   onSend,
   onTyping,
+  onBack,
 }) {
   const scrollRef = useRef(null)
   const stickBottom = useRef(true)
@@ -52,19 +53,26 @@ export default function Thread({
   return (
     <section className="thread">
       <header className="thread-header">
-        <div>
-          <div className="thread-title">{header}</div>
-          {conv.kind === 'lobby' ? (
-            <div className="muted">say hi 👋</div>
-          ) : (
-            <div className="muted">
-              {conv.members?.[0]?.online
-                ? 'online'
-                : conv.members?.[0]?.last_online
-                  ? 'last seen ' + new Date(conv.members[0].last_online).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
-                  : ''}
-            </div>
+        <div className="thread-header-left">
+          {onBack && (
+            <button className="icon-btn mobile-back" onClick={onBack} aria-label="Back">
+              ←
+            </button>
           )}
+          <div>
+            <div className="thread-title">{header}</div>
+            {conv.kind === 'lobby' ? (
+              <div className="muted">say hi 👋</div>
+            ) : (
+              <div className="muted">
+                {conv.members?.[0]?.online
+                  ? 'online'
+                  : conv.members?.[0]?.last_online
+                    ? 'last seen ' + new Date(conv.members[0].last_online).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+                    : ''}
+              </div>
+            )}
+          </div>
         </div>
         <span className={`conn ${connected ? 'on' : ''}`}>{connected ? '●' : 'connecting…'}</span>
       </header>
