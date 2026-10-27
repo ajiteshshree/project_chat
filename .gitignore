@@ -6,8 +6,8 @@ web/dist/*
 !web/dist/index.html
 
 # go artifacts
-chat
-server
+/chat
+/server
 
 # secrets / local env
 .env
