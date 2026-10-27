@@ -1,0 +1,19 @@
+# dependencies
+node_modules/
+
+# build output (placeholder index.html is kept via !)
+web/dist/*
+!web/dist/index.html
+
+# go artifacts
+chat
+server
+
+# secrets / local env
+.env
+.env.*
+!.env.example
+
+# os
+.DS_Store
+Thumbs.db

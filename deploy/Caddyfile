@@ -1,0 +1,10 @@
+{
+	email {$ACME_EMAIL}
+}
+
+# HTTP-01 challenge: make sure ports 80 and 443 are reachable
+# and your DuckDNS record points to this VM's public IP.
+{$APP_DOMAIN} {
+	encode gzip
+	reverse_proxy app:8080
+}
