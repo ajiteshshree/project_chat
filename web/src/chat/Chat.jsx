@@ -19,7 +19,7 @@ export default function Chat({ me, onLogout }) {
   const typingTimers = useRef({})
 
   const refreshConversations = useCallback(() => {
-    api.conversations().then(setConversations).catch(() => {})
+    api.conversations().then((res) => setConversations(Array.isArray(res) ? res : [])).catch(() => setConversations([]))
   }, [])
 
   const openConversation = useCallback((conv) => {
@@ -33,9 +33,10 @@ export default function Chat({ me, onLogout }) {
       .messages(conv.id)
       .then((msgs) => {
         if (activeRef.current !== conv.id) return
-        setMessages(msgs)
-        messagesRef.current = msgs
-        setHasMore(msgs.length === 50)
+        const arr = Array.isArray(msgs) ? msgs : []
+        setMessages(arr)
+        messagesRef.current = arr
+        setHasMore(arr.length === 50)
       })
       .catch(() => {})
     const ws = wsRef.current
@@ -128,12 +129,13 @@ export default function Chat({ me, onLogout }) {
       .messages(convId, before)
       .then((older) => {
         if (activeRef.current !== convId) return
+        const arr = Array.isArray(older) ? older : []
         setMessages((prev) => {
-          const merged = [...older, ...prev]
+          const merged = [...arr, ...prev]
           messagesRef.current = merged
           return merged
         })
-        setHasMore(older.length === 50)
+        setHasMore(arr.length === 50)
       })
       .catch(() => {})
       .finally(() => setLoadingMore(false))
