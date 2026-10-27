@@ -29,14 +29,17 @@ services:
     command: server /data --console-address ":9001"
     env_file: .env
     environment:
-      MC_HOST_local: "http://${MINIO_ROOT_USER:-minioadmin}:${MINIO_ROOT_SECRET:-minioadmin}@minio:9000"
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_SECRET}
+      MC_HOST_local: "http://${MINIO_ROOT_USER}:${MINIO_ROOT_SECRET}@minio:9000"
     volumes:
       - miniodata:/data
     healthcheck:
-      test: ["CMD", "mc", "ready", "local"]
+      test: ["CMD-SHELL", "timeout 5 bash -c '</dev/tcp/localhost/9000' || exit 1"]
       interval: 5s
-      timeout: 3s
-      retries: 12
+      timeout: 5s
+      retries: 20
+      start_period: 15s
 
   caddy:
     image: caddy:2-alpine
