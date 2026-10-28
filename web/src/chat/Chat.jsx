@@ -14,6 +14,7 @@ export default function Chat({ me, onLogout }) {
   const [showProfile, setShowProfile] = useState(false)
   const [connected, setConnected] = useState(false)
   const [showSidebar, setShowSidebar] = useState(true)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const wsRef = useRef(null)
   const activeRef = useRef(null)
   const messagesRef = useRef(null)
@@ -31,6 +32,7 @@ export default function Chat({ me, onLogout }) {
     setHasMore(true)
     setTyping({})
     setShowSidebar(false)
+    setMobileMenuOpen(false)
     api
       .messages(conv.id)
       .then((msgs) => {
@@ -162,14 +164,21 @@ export default function Chat({ me, onLogout }) {
     activeRef.current = null
   }, [])
 
+  const toggleMobileMenu = useCallback(() => {
+    setMobileMenuOpen((prev) => !prev)
+  }, [])
+
   return (
-    <div className={`layout ${showSidebar ? 'show-sidebar' : 'show-thread'}`}>
+    <div className={`layout ${showSidebar ? 'show-sidebar' : 'show-thread'} ${mobileMenuOpen ? 'mobile-menu-open' : ''}`}>
+      {mobileMenuOpen && (
+        <div className="mobile-menu-backdrop" onClick={() => setMobileMenuOpen(false)} />
+      )}
       <Sidebar
         me={me}
         conversations={conversations}
         active={active}
         onSelect={openConversation}
-        onOpenProfile={() => setShowProfile(true)}
+        onOpenProfile={() => { setShowProfile(true); setMobileMenuOpen(false); }}
         onLogout={onLogout}
         onConversationCreated={(conv) => {
           refreshConversations()
@@ -191,9 +200,18 @@ export default function Chat({ me, onLogout }) {
           }
           onTyping={sendTyping}
           onBack={goBack}
+          onToggleMenu={toggleMobileMenu}
         />
       ) : (
         <div className="thread empty-thread">
+          <header className="thread-header">
+            <div className="thread-header-left">
+              <button className="icon-btn mobile-menu-btn" onClick={toggleMobileMenu} aria-label="Menu">
+                ☰
+              </button>
+              <div className="thread-title">Chat</div>
+            </div>
+          </header>
           <div className="center-screen empty">Pick a conversation</div>
         </div>
       )}

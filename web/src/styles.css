@@ -339,22 +339,26 @@ input:focus, textarea:focus { border-color: var(--accent); }
 
 @media (max-width: 720px) {
   .layout {
-    grid-template-columns: 100vw 100vw;
-    width: 200vw;
-    transition: transform 0.25s ease;
+    grid-template-columns: 300px 1fr;
+    position: relative;
   }
-  .layout.show-sidebar {
+  .layout.show-sidebar .sidebar {
     transform: translateX(0);
   }
-  .layout.show-thread {
-    transform: translateX(-100vw);
-  }
-  body {
-    overflow: hidden;
+  .layout.show-thread .sidebar {
+    transform: translateX(-100%);
   }
   .sidebar {
-    width: 100vw;
+    position: fixed;
+    left: 0;
+    top: 0;
     height: 100vh;
+    width: 85vw;
+    max-width: 320px;
+    z-index: 30;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
   }
   .thread {
     width: 100vw;
@@ -372,12 +376,19 @@ input:focus, textarea:focus { border-color: var(--accent); }
     align-items: center;
     gap: 8px;
   }
-  .mobile-back {
+  .mobile-back,
+  .mobile-menu-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     font-size: 18px;
     padding: 6px 10px;
+  }
+  .mobile-menu-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 25;
   }
   .scroller {
     padding: 12px;
@@ -400,6 +411,7 @@ input:focus, textarea:focus { border-color: var(--accent); }
   }
 }
 
-.mobile-back {
+.mobile-back,
+.mobile-menu-btn {
   display: none;
 }

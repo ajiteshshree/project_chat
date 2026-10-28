@@ -59,6 +59,11 @@ export default function Thread({
               ←
             </button>
           )}
+          {onToggleMenu && (
+            <button className="icon-btn mobile-menu-btn" onClick={onToggleMenu} aria-label="Menu">
+              ☰
+            </button>
+          )}
           <div>
             <div className="thread-title">{header}</div>
             {conv.kind === 'lobby' ? (
